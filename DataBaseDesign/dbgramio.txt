@@ -1,0 +1,38 @@
+Table reviews {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  book_id int [ref: > books.id]
+  rating int
+  comment text
+  published bool
+  status varchar
+  created_at datetime
+  updated_at datetime
+}
+
+Table users {
+  id int [pk, increment]
+  username varchar(255) [unique]
+  email varchar(255) [unique]
+  password varchar(255)
+  created_at datetime
+  updated_at datetime
+}
+
+Table authors {
+  id int [pk, increment]
+  name varchar(255)
+}
+
+Table books {
+  id int [pk, increment]
+  title varchar(255)
+  author_id int [ref: <> authors.id]
+  published_date date
+  isbn varchar(13) [unique]
+  page_amount int
+  picture_url varchar
+  description text
+  created_at datetime
+  updated_at datetime
+}
