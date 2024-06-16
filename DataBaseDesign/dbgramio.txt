@@ -30,7 +30,7 @@ Table authors {
 Table books {
   id int [pk, increment]
   title varchar(255)
-  author_id int [ref: <> authors.id]
+  author_id int [ref: > authors.id]
   published_date date
   isbn varchar(13) [unique]
   page_amount int
