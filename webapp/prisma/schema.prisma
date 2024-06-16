@@ -97,3 +97,16 @@ model Author {
   id         Int      @id @default(autoincrement())
   name       String
 }
+
+model Book {
+  id            Int      @id @default(autoincrement())
+  title         String
+  authorId      Int
+  publishedDate DateTime
+  isbn          String   @unique
+  pageAmount    Int
+  pictureUrl    String?
+  description   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
