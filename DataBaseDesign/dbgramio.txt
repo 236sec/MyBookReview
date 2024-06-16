@@ -5,7 +5,6 @@ Table reviews {
   rating int
   comment text
   published bool
-  status varchar
   created_at datetime
   updated_at datetime
 }
