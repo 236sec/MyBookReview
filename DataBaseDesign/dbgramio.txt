@@ -12,9 +12,13 @@ Table reviews {
 
 Table users {
   id int [pk, increment]
-  username varchar(255) [unique]
+  name varchar(255)
   email varchar(255) [unique]
   password varchar(255)
+  image         varchar(255)
+  emailVerified datetime
+  role          varchar(255)
+  approve      bool
   created_at datetime
   updated_at datetime
 }
