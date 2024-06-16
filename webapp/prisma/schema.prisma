@@ -81,3 +81,10 @@ model Authenticator {
  
   @@id([userId, credentialID])
 }
+
+
+
+model Author {
+  id         Int      @id @default(autoincrement())
+  name       String
+}
