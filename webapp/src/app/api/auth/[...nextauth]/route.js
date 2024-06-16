@@ -26,7 +26,7 @@ export const authOptions = {
           user &&
           (await bcrypt.compare(credentials.password, user.password))
         ) {
-          if(user.approve == "False"){
+          if(user.approve == false){
             throw new Error('Your Account not Approved')
           }
           return {

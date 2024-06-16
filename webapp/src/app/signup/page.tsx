@@ -13,7 +13,7 @@ export default function SignUp() {
   const handleSubmit = async (e : any) => {
     e.preventDefault()
     try {
-        axios({
+        const res = await axios({
             method: 'post',
             url: '/api/auth/signup',
             data: {
@@ -21,13 +21,16 @@ export default function SignUp() {
               password: password,
               name: name,
             }
-        }).catch((error) => {
-            console.log('Error', error.message);
-            alert(error.message);
         });
-        router.push('/signin');
+        if(res.status === 200){
+          alert("User created please wait for admin approval to login.")
+          router.push('/signin');
+        }else{
+          alert('User could not be created')
+        }
     } catch (error) {
       console.log('error', error)
+      alert(error.message);
     }
   }
 

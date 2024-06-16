@@ -1,5 +1,6 @@
 import { prisma } from "../../../../../prisma/prisma"
 import bcrypt from 'bcryptjs'
+import { NextResponse } from 'next/server'
 
 export async function POST(request : Request) {
   try {
@@ -12,9 +13,9 @@ export async function POST(request : Request) {
         name,
       },
     })
-    return Response.json({ message: 'User created', user })
+    return NextResponse.json({ message: 'User created', user })
   } catch (error) {
     console.log(error)
-    return Response.json({ error: 'User could not be created' })
+    return NextResponse.json({ error: 'User could not be created' },{status: 500})
   }
 }
