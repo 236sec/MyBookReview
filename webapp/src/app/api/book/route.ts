@@ -55,20 +55,26 @@ export async function POST(request : Request) {
   }
 }
 
-// export async function GET(request : Request) {
-//     try {
-//       const hashedPassword = bcrypt.hashSync(password, 10)
-//       const user = await prisma.user.create({
-//         data: {
-//           email,
-//           password: hashedPassword,
-//           name,
-//         },
-//       })
-//       return NextResponse.json({ message: 'User created', user })
-//     } catch (error) {
-//       console.log(error)
-//       return NextResponse.json({ error: 'User could not be created' },{status: 500})
-//     }
-//   }
+export async function GET(request : Request) {
+    try {
+        const books = await prisma.book.findMany({
+            orderBy: {
+              updatedAt: 'desc',
+            },
+            take: 10,
+            include: {
+              author: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+        });
+        console.log(books);
+      return NextResponse.json({ books });
+    } catch (error) {
+      console.log(error)
+      return NextResponse.json({ error: 'Something Wrong' },{status: 500});
+    }
+  }
   
