@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Book" ALTER COLUMN "authorId" SET DEFAULT 0,
+ALTER COLUMN "publishedDate" DROP NOT NULL,
+ALTER COLUMN "pageAmount" SET DEFAULT 0;
