@@ -1,5 +1,5 @@
-import TableData from "../../app/components/TableData1"
-import { BooksResponse } from "../../app/types/booktable"
+import TableData from "../components/TableData1"
+import { BooksResponse } from "../types/booktable"
 
 export async function getServerSideProps() {
     const res = await fetch("http://localhost:3000/api/books");
@@ -8,7 +8,7 @@ export async function getServerSideProps() {
         return {props : {books:null}};
     }
     return { props: { books } }
-  }
+}
 
 interface TableProps {
     books: BooksResponse
