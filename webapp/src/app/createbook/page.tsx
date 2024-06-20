@@ -19,7 +19,7 @@ export default function FormCreateBook() {
     }
     return (
         <div>
-            <form onSubmit={onSubmit} >
+            <form onSubmit={onSubmit} className="text-black">
                 <label>
                     Title:
                     <input type="text" name="title" />

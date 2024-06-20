@@ -1,5 +1,5 @@
 import { prisma } from "../../../../prisma/prisma"
-import { NextResponse } from 'next/server'
+import { NextResponse,NextRequest } from 'next/server'
 
 export const config = {
   api: {
@@ -7,17 +7,7 @@ export const config = {
   },
 };
 
-interface PostData {
-    title: string,
-    author: string,
-    published_date: string,
-    isbn: string,
-    page_amount: number,
-    picture_url: string,
-    description: string
-}
-
-export async function POST(request : Request) {
+export async function POST(request : NextRequest) {
   try {
     const formData = await request.formData();
     const title = formData.get('title');
@@ -64,48 +54,28 @@ export async function POST(request : Request) {
   }
 }
 
-export async function GET(request : Request) {
-    try {
-      const url = new URL(request.url);
-      const bookid = url.searchParams.get('bookid');
-      if(bookid){
-        const book = await prisma.book.findUnique({
-            where: { id: parseInt(bookid) },
-            include: {
-              author: {
-                select: {
-                  name: true,
-                },
+export async function GET(req : NextRequest) {
+  try {
+    const url = new URL(req.url);
+    const bookid = url.searchParams.get('bookid');
+    if(bookid){
+      const book = await prisma.book.findUnique({
+          where: { id: parseInt(bookid) },
+          include: {
+            author: {
+              select: {
+                name: true,
               },
-            }
-        });
-        if(!book){
-          return NextResponse.json({ error: 'Book not found' },{status: 404});
-        }
-        return NextResponse.json({ book });
+            },
+          }
+      });
+      if(!book){
+        return NextResponse.json({ error: 'Book not found' },{status: 404});
       }
-        const books = await prisma.book.findMany({
-            orderBy: {
-              updatedAt: 'desc',
-            },
-            take: 10,
-            include: {
-              author: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-        });
-        const data = books.map((book) => {
-            const newBook = {...book,author: book.author.name}
-            delete newBook.authorId
-            return newBook
-        });
-      return NextResponse.json({ books:data });
-    } catch (error) {
-      console.log(error)
-      return NextResponse.json({ error: 'Something Wrong' },{status: 500});
+      return NextResponse.json({ book });
     }
+  } catch (error : Error) {
+    console.log(error);
+    return NextResponse.json({ error: error.message },{status: 500});
+  }
 }
-  

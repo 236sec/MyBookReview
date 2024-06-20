@@ -1,8 +1,15 @@
 import './table.css';
 
-export default function TableData({ data } : any) {
-    const headers = ["title","publishedDate","isbn","author"]
-    const books = data;
+export default function TableReview({ data } : any) {
+    const headers = ["title","rating","author","updatedAt"]
+    const reviews = data;
+    if(reviews === null) {
+        return (
+            <div>
+                <h1>No reviews found</h1>
+            </div>
+        )
+    }
     return (
         <div className="table-container">
             <table className="styled-table">
@@ -17,13 +24,13 @@ export default function TableData({ data } : any) {
                 </thead>
                 <tbody>
                         {
-                            books.map((book,index) => {
+                            reviews.map((review,index) => {
                                 return (
                                     <tr key={`${index}`}>
-                                        <td>{book.title}</td>
-                                        <td>{book.publishedDate}</td>
-                                        <td>{book.isbn}</td>
-                                        <td>{book.author}</td>
+                                        <td>{review.book.title}</td>
+                                        <td>{review.rating}</td>
+                                        <td>{review.user.name}</td>
+                                        <td>{review.updatedAt}</td>
                                     </tr>
                                 )
                             

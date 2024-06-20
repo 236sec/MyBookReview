@@ -24,3 +24,20 @@ export interface TableProjection {
     headers: string[];
     rows: string[][];
 }
+
+export interface Review {
+    id: number;
+    bookId: number;
+    userId: number;
+    rating: number;
+    comment: string | null;
+    createdAt: string;
+    updatedAt: string;
+    user: User;
+    book: Book;
+
+}
+
+export interface ReviewsResponse {
+    reviews: Review[];
+}
