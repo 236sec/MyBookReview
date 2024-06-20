@@ -21,47 +21,42 @@ export async function POST(request : Request) {
   try {
     const formData = await request.formData();
     const title = formData.get('title');
-    const author = formData.get('author');
+    const author_name = formData.get('author');
     const published_date = formData.get('publishedDate');
     const isbn = formData.get('isbn');
     const page_amount = Number(formData.get('pageAmount'));
     const picture_url = formData.get('pictureUrl');
     const description = formData.get('description');
-    const formatDate = new Date(published_date);
-    if(!title || !isbn || !author){
+    let formatDate = new Date(published_date);
+    if(!title || !isbn || !author_name){
         throw Error('Title and ISBN are required');
     }
     let authorRecord = await prisma.author.findUnique({
-        where: { name: author },
+        where: { name: author_name },
     })
     if(!authorRecord){
         authorRecord = await prisma.author.create({
             data: {
-                name: author
+                name: author_name
             }
         })
     }
-
-
-    const bookData  = {
+    if(!published_date){
+      formatDate = null;
+    }
+    const result = await prisma.book.create({
+      data: {
         title,
-        authorId: authorRecord.id, // use the ID of the author record
         publishedDate: formatDate,
         isbn,
-        pageAmount: page_amount,
+        pageAmount:page_amount,
         pictureUrl: picture_url,
-        description
-    }
-
-    const filteredData = Object.fromEntries(
-        Object.entries(bookData).filter(([_, v]) => v != null)
-    )
-
-    const book = await prisma.book.create({
-        data: filteredData
+        description,
+        author: { connect: { name: author_name } },
+      },
     })
 
-    return NextResponse.json({ message: 'Book created', book });
+  return NextResponse.json({ message: 'Book created', result });
 
   } catch (error : any) {
     console.log(error);
