@@ -51,30 +51,35 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(request : Request) {
-    try {
-        const reviews = await prisma.book.findMany({
-            orderBy: {
-              updatedAt: 'desc',
-            },
-            take: 10,
-            include: {
-              author: {
-                select: {
-                  name: true,
-                },
+export async function GET(req : NextRequest) {
+  try {
+    const url = new URL(req.url);
+    const reviewid = url.searchParams.get('reviewid');
+    if(reviewid){
+      const review = await prisma.review.findUnique({
+          where: { id: parseInt(reviewid) },
+          include: {
+            user: {
+              select: {
+                name: true,
               },
             },
-        });
-        const data = books.map((book) => {
-            const newBook = {...book,author: book.author.name}
-            delete newBook.authorId
-            return newBook
-        });
-      return NextResponse.json({ books:data });
-    } catch (error) {
-      console.log(error)
-      return NextResponse.json({ error: 'Something Wrong' },{status: 500});
+            book: {
+              select: {
+                title: true,
+                pictureUrl: true,
+              }
+            },
+          }
+      });
+      if(!review){
+        throw Error('Review not found');
+      }
+      return NextResponse.json({ review });
     }
+  } catch (error : any) {
+    console.log(error);
+    return NextResponse.json({ error: error.message },{status: 500});
+  }
 }
   
