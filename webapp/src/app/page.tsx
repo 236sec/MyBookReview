@@ -1,6 +1,6 @@
-import TableBook from "./components/TableBook";
-import TableReview from "./components/TableReview";
-import { BooksResponse,ReviewsResponse } from "./types/types";
+import TableBook from "../components/TableBook";
+import TableReview from "../components/TableReview";
+import { BooksResponse,ReviewsResponse } from "../types/types";
 
 async function getBooks() {
   const res = await fetch("http://localhost:3000/api/allbooks");

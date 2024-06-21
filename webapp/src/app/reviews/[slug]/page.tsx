@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         <div>
             <h1>Reviews</h1>
             <h2>{reviewid}</h2>
-            <Image alt="book_picuter" src={"https://picsum.photos/200"} width={500} height={500} />
+            <Image alt="book_picture" src={"https://picsum.photos/200"} width={500} height={500} />
         </div>
     )
 }
