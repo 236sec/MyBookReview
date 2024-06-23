@@ -3,7 +3,7 @@ import TableReview from "../components/TableReview";
 import { BooksResponse,ReviewsResponse } from "../types/types";
 
 async function getBooks() {
-  const res = await fetch("http://localhost:3000/api/allbooks");
+  const res = await fetch("http://localhost:3000/api/books");
   const { books } : BooksResponse = await res.json();
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
@@ -14,7 +14,7 @@ async function getBooks() {
 }
 
 async function getReviews() {
-  const res = await fetch("http://localhost:3000/api/allreviews");
+  const res = await fetch("http://localhost:3000/api/reviews");
   const { reviews } : ReviewsResponse = await res.json();
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.

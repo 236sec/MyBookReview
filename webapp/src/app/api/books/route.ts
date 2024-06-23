@@ -7,6 +7,32 @@ export const config = {
   },
 };
 
+export async function GET(req : NextRequest) {
+  try {
+    const books = await prisma.book.findMany({
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      take: 10,
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+    const data = books.map((book) => {
+    const newBook = {...book,author: book.author.name}
+      return newBook
+    });
+    return NextResponse.json({ books:data });
+  } catch (error : any) {
+    console.log(error.message)
+    return NextResponse.json({ error: 'Something Wrong' },{status: 500});
+  }
+}
+
 export async function POST(request : NextRequest) {
   try {
     const formData = await request.formData();
@@ -48,32 +74,6 @@ export async function POST(request : NextRequest) {
 
   return NextResponse.json({ message: 'Book created', result });
 
-  } catch (error : any) {
-    console.log(error);
-    return NextResponse.json({ error: error.message },{status: 500});
-  }
-}
-
-export async function GET(req : NextRequest) {
-  try {
-    const url = new URL(req.url);
-    const bookid = url.searchParams.get('bookid');
-    if(bookid){
-      const book = await prisma.book.findUnique({
-          where: { id: parseInt(bookid) },
-          include: {
-            author: {
-              select: {
-                name: true,
-              },
-            },
-          }
-      });
-      if(!book){
-        return NextResponse.json({ error: 'Book not found' },{status: 404});
-      }
-      return NextResponse.json({ book });
-    }
   } catch (error : any) {
     console.log(error);
     return NextResponse.json({ error: error.message },{status: 500});

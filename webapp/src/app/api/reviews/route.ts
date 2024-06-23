@@ -15,6 +15,33 @@ interface ReviewData {
     published: string
 }
 
+export async function GET(request : NextRequest) {
+  try {
+      const reviews = await prisma.review.findMany({
+          orderBy: {
+            updatedAt: 'desc',
+          },
+          take: 10,
+          include: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
+            book: {
+              select: {
+                title: true,
+              }
+            }
+          },
+      });
+    return NextResponse.json({ reviews });
+  } catch (error : any) {
+    console.log(error.message);
+    return NextResponse.json({ error: 'Something Wrong' },{status: 500});
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -50,36 +77,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message },{status: 500});
   }
 }
-
-export async function GET(req : NextRequest) {
-  try {
-    const url = new URL(req.url);
-    const reviewid = url.searchParams.get('reviewid');
-    if(reviewid){
-      const review = await prisma.review.findUnique({
-          where: { id: parseInt(reviewid) },
-          include: {
-            user: {
-              select: {
-                name: true,
-              },
-            },
-            book: {
-              select: {
-                title: true,
-                pictureUrl: true,
-              }
-            },
-          }
-      });
-      if(!review){
-        throw Error('Review not found');
-      }
-      return NextResponse.json({ review });
-    }
-  } catch (error : any) {
-    console.log(error);
-    return NextResponse.json({ error: error.message },{status: 500});
-  }
-}
-  

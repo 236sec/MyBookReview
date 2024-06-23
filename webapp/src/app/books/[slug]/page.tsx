@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 async function getReview(id : number) {
-    const res = await fetch(`http://localhost:3000/api/books?bookid=${id}`);
+    const res = await fetch(`http://localhost:3000/api/books/${id}`);
     const { book } = await res.json();
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.

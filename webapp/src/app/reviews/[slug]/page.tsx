@@ -1,14 +1,18 @@
 import Image from "next/image";
+import { ReviewIdResponse } from "@/types/types";
 
-async function getReview(id : number) {
-    const res = await fetch(`http://localhost:3000/api/reviews?reviewid=${id}`);
-    const { review } = await res.json();
+
+
+
+async function getReview(id : number): Promise<ReviewIdResponse | null> {
+    const res = await fetch(`http://localhost:3000/api/reviews/${id}`);
+    if(!res.ok) {
+        return null;
+    }
+    const data = await res.json();
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
-    if(!review) {
-      return null;
-    }
-    return review;
+    return data;
 }
 
 
@@ -17,7 +21,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
     if(isNaN(reviewid)) {
         return <h1>Invalid Review ID</h1>
     }
-    const review = await getReview(reviewid);
+    const data = await getReview(reviewid);
+    if(data === null) {
+        return <h1>Review not found</h1>
+    }
+    const { review } = data;
     console.log(review);
     return (
         <div>
